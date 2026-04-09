@@ -1,0 +1,49 @@
+{
+    "python.defaultInterpreterPath": "C:/Users/yanni/miniconda3/envs/pcb-ai/python.exe",
+    "python.analysis.extraPaths": [
+        "C:/Users/yanni/miniconda3/envs/pcb-ai/Lib/site-packages"
+    ],
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.formatting.provider": "black",
+    "python.sortImports.provider": "isort",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+        "source.fixAll": "explicit"
+    },
+    "editor.rulers": [
+        100
+    ],
+    "editor.renderWhitespace": "boundary",
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/.mypy_cache": true,
+        "**/.pytest_cache": true
+    },
+    "files.associations": {
+        "*.py": "python"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.tabSize": 4
+    },
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.analysis.typeCheckingMode": "basic",
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "*.py": "${capture}.pyi"
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportAttributeAccessIssue": "warning",
+        "reportOptionalMemberAccess": "warning",
+        "reportGeneralTypeIssues": "warning"
+    },
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.indexing": true,
+    "python-envs.defaultPackageManager": "ms-python.python:conda"
+}
