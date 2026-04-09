@@ -34,7 +34,7 @@ jobs:
 
       - name: Zip distribution
         run: |
-          Compress-Archive -Path "pcb-ai-inspector\dist\PCB-AI-Inspector" -DestinationPath "PCB-AI-Inspector.zip"
+          Compress-Archive -Path "pcb-ai-inspector/dist/PCB-AI-Inspector" -DestinationPath "PCB-AI-Inspector.zip"
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
