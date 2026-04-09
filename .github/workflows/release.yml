@@ -11,9 +11,6 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    defaults:
-      run:
-        working-directory: pcb-ai-inspector
     
     steps:
       - name: Checkout code
@@ -28,22 +25,23 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd pcb-ai-inspector
           pip install -e .
           pip install pyinstaller
 
       - name: Build exe
-        run: pyinstaller build.spec --noconfirm
+        run: |
+          cd pcb-ai-inspector
+          pyinstaller build.spec --noconfirm
 
       - name: Zip distribution
         run: |
-          Compress-Archive -Path "dist/PCB-AI-Inspector" -DestinationPath "../PCB-AI-Inspector.zip"
+          cd pcb-ai-inspector
+          Compress-Archive -Path "dist/PCB-AI-Inspector" -DestinationPath "PCB-AI-Inspector.zip"
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.event.inputs.version }}
-          name: Release ${{ github.event.inputs.version }}
-          draft: true
-          files: ../PCB-AI-Inspector.zip
+        run: |
+          cd pcb-ai-inspector
+          gh release create ${{ github.event.inputs.version }} --title "Release ${{ github.event.inputs.version }}" --draft PCB-AI-Inspector.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
