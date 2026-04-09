@@ -4,9 +4,8 @@ PCB AI Inspector - 主入口点
 本模块提供 PCB 缺陷检测软件的主应用程序入口点。
 """
 
-from __future__ import annotations
-
 import sys
+import os
 from pathlib import Path
 
 from loguru import logger
@@ -23,7 +22,6 @@ def setup_logging(log_dir: Path | None = None) -> None:
 
     log_dir.mkdir(parents=True, exist_ok=True)
 
-    # 移除默认处理器，避免重复输出
     logger.remove()
 
     logger.add(
@@ -34,38 +32,12 @@ def setup_logging(log_dir: Path | None = None) -> None:
         format="{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} - {message}",
     )
 
-    # 同时输出到控制台
-    logger.add(
-        sys.stdout,
-        level="INFO",
-        format="{time:HH:mm:ss} | {level} | {message}",
-    )
-
-
-def check_license() -> bool:
-    """检查软件授权状态。
-
-    返回:
-        已激活或处于评估模式时返回 True
-    """
-    try:
-        from pcb_ai_inspector.core.activation import check_activation
-
-        info = check_activation()
-
-        if info.state == "activated":
-            logger.info("许可证: 已激活")
-            return True
-        elif info.state == "evaluation":
-            logger.info(f"许可证: 评估版 ({info.message})")
-            return True
-        else:
-            logger.warning(f"许可证: {info.message}")
-            return True  # 允许在未授权模式下运行用于演示
-
-    except Exception as e:
-        logger.warning(f"许可证检查失败: {e}")
-        return True  # 如果激活模块失败，允许运行
+    if sys.stdout is not None:
+        logger.add(
+            sys.stdout,
+            level="INFO",
+            format="{time:HH:mm:ss} | {level} | {message}",
+        )
 
 
 def main() -> int:
@@ -80,19 +52,21 @@ def main() -> int:
     logger.info("=" * 50)
 
     try:
-        # 检查许可证
-        if not check_license():
-            logger.error("许可证检查失败")
-            return 1
-
-        # 避免循环导入，在此处导入
-        from pcb_ai_inspector.ui.main_window import MainWindow
         from PyQt6.QtWidgets import QApplication
+        from PyQt6.QtCore import Qt
 
         app = QApplication(sys.argv)
         app.setApplicationName("PCB AI Inspector")
         app.setOrganizationName("PCB-AI")
         app.setApplicationVersion("1.0.0")
+
+        if not getattr(sys, "frozen", False):
+            from pcb_ai_inspector.core.activation import check_activation
+            if not check_activation().state == "activated":
+                logger.warning("许可证检查失败")
+                return 1
+
+        from pcb_ai_inspector.ui.main_window import MainWindow
 
         window = MainWindow()
         window.show()
@@ -102,6 +76,7 @@ def main() -> int:
 
     except Exception as e:
         logger.exception(f"应用程序启动失败: {e}")
+        input("按回车键退出...")
         return 1
 
 

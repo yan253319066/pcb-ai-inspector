@@ -44,7 +44,7 @@ from PyQt6.QtWidgets import (
 
 from ..core.defect_types import MODEL_CLASS_MAPPING, DefectType
 from ..core.history import HistoryManager, get_history_manager
-from ..core.settings import DEFAULT_MODEL_PATH, get_settings_manager
+from ..core.settings import DEFAULT_MODEL_PATH, DEFAULT_MODEL_PATH_RESOLVED, get_settings_manager
 from ..models.detector import YOLODetector
 from ..utils.device import get_device_info
 from .defect_overlay import DetectionResult
@@ -293,7 +293,7 @@ class MainWindow(QMainWindow):
 
     def _get_model_path(self) -> Optional[Path]:
         """获取模型路径，检查默认路径。"""
-        model_path = Path(DEFAULT_MODEL_PATH)
+        model_path = Path(DEFAULT_MODEL_PATH_RESOLVED)
         if model_path.exists():
             logger.info(f"找到模型: {model_path}")
             return model_path

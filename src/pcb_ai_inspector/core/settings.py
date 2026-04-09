@@ -12,12 +12,38 @@ PCB AI Inspector 设置管理模块。
 from __future__ import annotations
 
 import json
+import sys
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any, Optional
 
 DEFAULT_MODEL_PATH = "models/best.pt"
+
+
+def _get_model_path() -> Path:
+    """获取模型路径，支持打包后的 exe 运行。
+
+    返回:
+        模型文件的绝对路径
+    """
+    model_path = Path(DEFAULT_MODEL_PATH)
+    if model_path.exists():
+        return model_path.resolve()
+
+    if getattr(sys, "frozen", False):
+        base_dir = Path(sys._MEIPASS)
+    else:
+        base_dir = Path(__file__).parent.parent.parent
+
+    bundled_model = base_dir / DEFAULT_MODEL_PATH
+    if bundled_model.exists():
+        return bundled_model.resolve()
+
+    return model_path
+
+
+DEFAULT_MODEL_PATH_RESOLVED = str(_get_model_path())
 
 
 # ==================== 枚举定义 ====================
