@@ -23,18 +23,15 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd pcb-ai-inspector
           pip install -e .
           pip install pyinstaller
 
       - name: Build exe
-        run: |
-          cd pcb-ai-inspector
-          pyinstaller build.spec --noconfirm
+        run: pyinstaller build.spec --noconfirm
 
       - name: Zip distribution
         run: |
-          Compress-Archive -Path "pcb-ai-inspector/dist/PCB-AI-Inspector" -DestinationPath "PCB-AI-Inspector.zip"
+          Compress-Archive -Path "dist/PCB-AI-Inspector" -DestinationPath "PCB-AI-Inspector.zip"
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
