@@ -11,10 +11,15 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: pcb-ai-inspector
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          path: pcb-ai-inspector
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -31,7 +36,7 @@ jobs:
 
       - name: Zip distribution
         run: |
-          Compress-Archive -Path "dist/PCB-AI-Inspector" -DestinationPath "PCB-AI-Inspector.zip"
+          Compress-Archive -Path "dist/PCB-AI-Inspector" -DestinationPath "../PCB-AI-Inspector.zip"
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
@@ -39,6 +44,6 @@ jobs:
           tag_name: ${{ github.event.inputs.version }}
           name: Release ${{ github.event.inputs.version }}
           draft: true
-          files: PCB-AI-Inspector.zip
+          files: ../PCB-AI-Inspector.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
