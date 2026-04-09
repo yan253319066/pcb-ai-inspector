@@ -45,6 +45,6 @@ jobs:
       - name: Create Release
         run: |
           cd pcb-ai-inspector
-          gh release create ${{ github.event.inputs.version }} --title "Release ${{ github.event.inputs.version }}" --draft PCB-AI-Inspector.zip
+          gh release create ${{ github.event.inputs.version }} --title "Release ${{ github.event.inputs.version }}" PCB-AI-Inspector.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
